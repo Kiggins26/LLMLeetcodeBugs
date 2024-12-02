@@ -1,13 +1,127 @@
 Easy:
 
-Q 1:
+Q 1: https://leetcode.com/problems/minimum-positive-sum-subarray/description/
+Original code:
+class Solution {
+public:
+    int minimumSumSubarray(vector<int>& nums, int l, int r) {
+        
+        int minSum = INT_MAX;
+        for(int i = l; i <= r; i++) {
+            int currSum = 0;
+
+            for(int j = 0; j < i; j++) {
+                currSum += nums[j];
+            }
+            if(currSum > 0) {
+                minSum = min(minSum, currSum);
+            }
+
+            int low = 0, high = i;
+
+            while(high < nums.size()) {
+                currSum -= nums[low];
+                currSum += nums[high];
+
+                low ++, high++;
+
+                if(currSum > 0) {
+                    minSum = min(minSum, currSum);
+                }
+            }
+        }
+        if(minSum == INT_MAX) return -1;
+        return minSum;
+    }
+};
+Syntax ERROR:
+class Solution {
+public:
+    int minimumSumSubarray(vector<int>& nums, int l, int r) {
+        
+        int minSum = INT_MAX;
+        for(int i = l; i <= r; i++) {
+            int currSum = 0;
+
+            for(int j = 0; j < i; j++) {
+                currSum += nums[j];
+            }
+            if(currSum > 0) {
+                minSum = min(minSum, currSum);
+            }
+
+            int low = 0, high = i;
+
+            while(high < nums.size()) {
+                currSum; -= nums[low];
+                currSum += nums[high];
+
+                low ++, high++;
+
+                if(int currSum > 0) {
+                    minSum = min(minSum, currSum);
+                }
+            }
+        }
+        if(minSum == INT_MAX) return -1;
+        return minSum
+    }
+};
+LOGIC ERROR:
+class Solution {
+public:
+    int minimumSumSubarray(vector<int>& nums, int l, int r) {
+        
+        int minSum = INT_MAX;
+        for(int i = l; i <= r; i++) {
+            int currSum = 0;
+
+            for(int j = 0; j < i; j++) {
+                currSum += nums[j];
+            }
+            if(currSum > 0) {
+                minSum = min(minSum, currSum);
+            }
+
+            int low = 0, high = i;
+
+            while(high < nums.size()) {
+                currSum -= nums[low];
+                currSum += nums[high];
+
+                low ++, high++;
+
+                if(currSum > 0) {
+                    minSum = min(minSum, currSum);
+                }
+            }
+        }
+        if(minSum != INT_MAX) return -1;
+        return minSum;
+    }
+};
 Q 2:
+Original code:
+Syntax ERROR:
+LOGIC ERROR:
 Q 3:
+Original code:
+Syntax ERROR:
+LOGIC ERROR:
 
 Medium:
 Q 1:
+Original code:
+Syntax ERROR:
+LOGIC ERROR:
 Q 2:
+Original code:
+Syntax ERROR:
+LOGIC ERROR:
 Q 3:
+Original code:
+Syntax ERROR:
+LOGIC ERROR:
 
 Hard:
 Q 1 https://leetcode.com/problems/maximize-sum-of-weights-after-edge-removals/description/:
