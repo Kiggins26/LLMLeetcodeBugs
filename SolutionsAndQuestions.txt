@@ -140,10 +140,52 @@ public:
         }
         return true;}
 }
-Q 3:
+Q 3: https://leetcode.com/problems/check-balanced-string/description/
 Original code:
+class Solution {
+public:
+    bool isBalanced(string num) 
+    {
+        map<int, int>mp;
+        bool flag = true;
+        for(auto ch:num)
+        {
+            mp[flag] += ch - '0';
+            flag = !flag;
+        }
+        return mp[0] == mp[1];
+    }
+};
 Syntax ERROR:
+class Solution {
+public:
+    bool isBalanced(string num) 
+    {
+        map<int, int>mp
+        bool flag = true;
+        for(auto chnum)
+        {
+            mp[flag] += ch - "'0';
+            flag = !flag;
+        }
+        return mp[0] == mp[1];
+    }
+};
 LOGIC ERROR:
+class Solution {
+public:
+    bool isBalanced(string num) 
+    {
+        map<int, int>mp;
+        bool flag = true;
+        for(auto ch:num)
+        {
+            mp[flag] -= ch - '0';
+            flag = !flag;
+        }
+        return mp[0] == mp[1];
+    }
+};
 
 Medium:
 Q 1:
