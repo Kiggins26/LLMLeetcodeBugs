@@ -100,10 +100,46 @@ public:
         return minSum;
     }
 };
-Q 2:
+Q 2: https://leetcode.com/problems/stone-removal-game/description/
 Original code:
+class Solution {
+public:
+    bool canAliceWin(int n) {
+        int stones[] = {19, 15, 11, 7, 3};
+        for (int stone : stones) {
+            if (n >= stone) {
+                n -= stone;} 
+            else {
+                return n >= (stone / 2) + 1;}
+        }
+        return true;}
+}
 Syntax ERROR:
+class Solution {
+public:
+    bool canAliceWin(int n) {
+        int stones[] = {19, 15, 11, 7, 3};
+        for (int stone  stones) {
+            if (n >= stone) {
+                n -= stone;} 
+            else {
+                return n >= (stone / 2) + 1;
+        }
+        return true}
+}
 LOGIC ERROR:
+class Solution {
+public:
+    bool canAliceWin(int n) {
+        int stones[] = { 11, 7, 3};
+        for (int stone : stones) {
+            if (n >= stone) {
+                n -= stone;} 
+            else {
+                return n >= (stone / 2) + 1;}
+        }
+        return true;}
+}
 Q 3:
 Original code:
 Syntax ERROR:
