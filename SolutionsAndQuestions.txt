@@ -1,0 +1,122 @@
+Easy:
+
+Q 1:
+Q 2:
+Q 3:
+
+Medium:
+Q 1:
+Q 2:
+Q 3:
+
+Hard:
+Q 1 https://leetcode.com/problems/maximize-sum-of-weights-after-edge-removals/description/:
+original code:
+    long long maximizeSumOfWeights(vector<vector<int>>& edges, int k) {
+        int n = edges.size() + 1;
+        vector<vector<pair<int, int>>> G(n);
+        for (auto& e : edges) {
+            G[e[0]].push_back({e[1], e[2]});
+            G[e[1]].push_back({e[0], e[2]});
+        }
+
+        function<vector<long long>(int, int)> dfs = [&](int i, int pre) -> vector<long long> {
+            long long res = 0, res2 = 0;
+            vector<int> diff;
+            for (auto& [j, w] : G[i]) {
+                if (j == pre) continue;
+                vector<long long> v = dfs(j, i);
+                res += v[1];
+                diff.push_back(max(0LL, v[0] + w - v[1]));
+            }
+
+            // Quick select
+            if (diff.size() >= k) {
+                nth_element(diff.begin(), diff.begin() + k - 1, diff.end(), greater<int>());
+            }
+            for (int i = 0; i < k - 1 && i < diff.size(); ++i) {
+                res += diff[i];
+            }
+            res2 = diff.size() >= k ? res + diff[k - 1] : res;
+            return {res, res2};
+        };
+
+        return dfs(0, -1)[1];
+    }
+Syntax ERROR:
+class Solution {
+public:
+        long long maximizeSumOfWeights(vector<vector<int>>& edges, int k) {
+        int n = edges.size() + 1;
+        vector<vector<pair<int, int>>> G(n);
+        for (auto& e : edges) {
+            G[e[0]].push_back({e[1], e[2]});
+            G[e[1]].push_back({e[0], e[2]});
+        }
+
+        function<vector<long long>(int, int)> dfs = [&](int i, int pre) -> vector<long long> {
+            long long res = 0, res2 = 0;
+            vector<int*> diff;
+            for (auto& [j, w] : G[i]) {
+                if (j == pre) continue;
+                vector<long long> v = dfs(j, i);
+                res += v[1];
+                diff.push_back(max(0LL, v[0] + w - v[1]]))
+            }
+
+            // Quick select
+            if (diff.size() >= k) {
+                nth_element(diff.begin(), diff.begin() + k - 1, diff.end(), greater<int>());
+            }
+            for (int i = 0; i < k - 1 && i < diff.size(); ++i) {
+                res += diff[i];
+            }
+            res2 = diff.size() >= k ? res + diff[k - 1] : res;
+            return {res, res2};
+        };
+
+        return dfs(0, -1)[1];
+    }
+    
+};
+
+LOGIC ERROR:
+class Solution {
+public:
+    long long maximizeSumOfWeights(vector<vector<int>>& edges, int k) {
+        int n = edges.size() + 1;
+        vector<vector<pair<int, int>>> G(n);
+        for (auto& e : edges) {
+            G[e[0]].push_back({e[1], e[2]});
+            G[e[1]].push_back({e[0], e[2]});
+        }
+
+        function<vector<long long>(int, int)> dfs = [&](int i, int pre) -> vector<long long> {
+            long long res = 0, res2 = 0;
+            vector<int> diff;
+            for (auto& [j, w] : G[i]) {
+                if (j == pre) continue;
+                vector<long long> v = dfs(j, i);
+                res += v[1];
+                diff.push_back(max(0LL, v[0] + w - v[1]));
+            }
+
+            // Quick select
+            if (diff.size() > k) {
+                nth_element(diff.begin(), diff.begin() + k - 1, diff.end(), greater<int>());
+            }
+            for (int i = 0; i < k - 1 && i < diff.size(); ++i) {
+                res += diff[i];
+            }
+            res2 = diff.size() >= k ? res + diff[k - 1] : res;
+            return {res, res2};
+        };
+
+        return dfs(0, -1)[1];
+    }
+    }
+};
+
+
+Q 2:
+Q 3:
