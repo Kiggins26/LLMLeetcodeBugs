@@ -118,5 +118,309 @@ public:
 };
 
 
-Q 2:
+Q 2: https://leetcode.com/problems/check-if-dfs-strings-are-palindromes/description/
+Original Code:
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> adj;  // Adjacency list to store the tree structure
+    vector<bool> ans;  // To store results for each node
+    string dfsStr;  // To store concatenated characters from DFS traversal
+    vector<array<int, 3>> evenPalindromes, oddPalindromes;  // Store node, length for palindromes
+
+    // Manacher's Algorithm for odd-length palindromes
+    vector<int> manacher_odd(const string& s) {
+        int n = s.size();
+        vector<int> p(n, 0);  // Store radius of palindromes
+        int l = 0, r = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (i < r) {
+                p[i] = min(p[l + (r - i)], r - i);  // Get minimum palindrome length based on mirror position
+            }
+            // Expand around the center to find palindromes
+            while (i - p[i] >= 0 && i + p[i] < n && s[i - p[i]] == s[i + p[i]]) {
+                p[i]++;
+            }
+            // Update the left and right bounds
+            if (i + p[i] > r) {
+                l = i - p[i];
+                r = i + p[i];
+            }
+        }
+        return p;
+    }
+
+    // To handle even-length palindromes, we use a "hashtag" transformation
+    string hashtag(const string& s) {
+        string res(2 * s.size() + 1, '#');
+        for (int i = 0; i < s.size(); i++) {
+            res[2 * i + 1] = s[i];
+        }
+        return res;
+    }
+
+    // DFS to traverse the tree and collect the characters in dfsStr
+    void dfs(int node, const string& s, int& index) {
+        int start = index;
+
+        // Traverse the subtree of the current node
+        for (int child : adj[node]) {
+            dfs(child, s, index);
+        }
+
+        dfsStr[index++] = s[node];
+
+        int end = index - 1;
+        int length = end - start + 1;
+
+        if (length % 2 == 0) {
+            int mid = (start + end) / 2;
+            evenPalindromes.push_back({2 * (mid + 1), length, node});
+        } else {
+            oddPalindromes.push_back({(start + end) / 2, (length + 1) / 2, node});
+        }
+    }
+
+    vector<bool> findAnswer(vector<int>& parent, string s) {
+        int n = parent.size();
+        adj.resize(n);
+        ans.resize(n, false);
+        dfsStr.resize(n);
+
+        // Build the tree from the parent array
+        for (int i = 1; i < n; i++) {
+            adj[parent[i]].push_back(i);
+        }
+
+        int index = 0;
+        dfs(0, s, index);  // Start DFS from the root
+
+        // Apply Manacher's algorithm on the DFS traversal string
+        vector<int> oddLengths = manacher_odd(dfsStr);
+        vector<int> evenLengths = manacher_odd(hashtag(dfsStr));
+
+        // Check odd-length palindromes
+        for (auto& entry : oddPalindromes) {
+            if (oddLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]] = true;
+            }
+        }
+
+        // Check even-length palindromes
+        for (auto& entry : evenPalindromes) {
+            if (evenLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]] = true;
+            }
+        }
+
+        return ans;
+    }
+};
+
+Syntax ERROR:
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> adj;  // Adjacency list to store the tree structure
+    vector<bool> ans;  // To store results for each node
+    string dfsStr;  // To store concatenated characters from DFS traversal
+    vector<array<int, 3>> evenPalindromes, oddPalindromes;  // Store node, length for palindromes
+
+    // Manacher's Algorithm for odd-length palindromes
+    vector<int> manacher_odd(const string& s) {
+        int n = s.size();
+        vector<int> p(n, 0);  // Store radius of palindromes
+        int l = 0, r = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (i < r) {
+                p[i] = min(p[l + (r - i)], r - i);  // Get minimum palindrome length based on mirror position
+            }
+            // Expand around the center to find palindromes
+            while (i - p[i] >= 0 && i + p[i] < n && s[i - p[i]] == s[i + p[i]]) {
+                p[i]++;
+            }
+            // Update the left and right bounds
+            if (i + p[i] > r) {
+                l = i - p[i];
+                r = i + p[i];
+            }
+        }
+        return p;
+    }
+
+    // To handle even-length palindromes, we use a "hashtag" transformation
+    string hashtag(const string& s) {
+        string res(2 * s.size() + 1, '#');
+        for (int i = 0; i < s.size(); i++) {
+            res[2 * i + 1] = s[i];
+        }
+        return res;
+    }
+
+    // DFS to traverse the tree and collect the characters in dfsStr
+    void dfs(int node, const string& s, int& index) {
+        int start = index;
+
+        // Traverse the subtree of the current node
+        for (int child : adj[node]) {
+            dfs(child, s, index);
+        }
+
+        dfsStr[index++] = s[node];
+
+        int end = index - 1;
+        int length = end - start + 1;
+
+        if (length % 2 == 0) {
+            int mid = (start + end) / 2;
+            evenPalindromes.push_back({2 * (mid + 1), length, node});
+        } else {
+            oddPalindromes.push_back({(start + end) / 2, (length + 1) / 2, node});
+        }
+    }
+
+    vector<bool> findAnswer(vector<int>& parent, string s) {
+        int n = parent.size();
+        adj.resize(n);
+        ans.resize(n, false);
+        dfsStr.resize(n);
+
+        // Build the tree from the parent array
+        for (int i = 1; i < n; i++) {
+            adj[parent[i]].push_back(i);
+        }
+
+        int index = 0;
+        dfs(0, s, index);  // Start DFS from the root
+
+        // Apply Manacher's algorithm on the DFS traversal string
+        vector<int> oddLengths = manacher_odd(dfsStr);
+        vector<int*> evenLengths = manacher_odd(hashtag(dfsStr));
+
+        // Check odd-length palindromes
+        for (auto& entry : oddPalindromes) {
+            if (oddLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]]] = true;
+            }
+        }
+
+        // Check even-length palindromes
+        for (auto& entry : evenPalindromes) {
+            if (evenLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]] = true;
+            }
+        }
+
+        return ans
+    }
+};
+
+LOGIC ERROR:
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> adj;  // Adjacency list to store the tree structure
+    vector<bool> ans;  // To store results for each node
+    string dfsStr;  // To store concatenated characters from DFS traversal
+    vector<array<int, 3>> evenPalindromes, oddPalindromes;  // Store node, length for palindromes
+
+    // Manacher's Algorithm for odd-length palindromes
+    vector<int> manacher_odd(const string& s) {
+        int n = s.size();
+        vector<int> p(n, 0);  // Store radius of palindromes
+        int l = 0, r = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (i < r) {
+                p[i] = min(p[l + (r - i)], r - i);  // Get minimum palindrome length based on mirror position
+            }
+            // Expand around the center to find palindromes
+            while (i - p[i] >= 0 && i + p[i] < n && s[i - p[i]] == s[i + p[i]]) {
+                p[i]++;
+            }
+            // Update the left and right bounds
+            if (i + p[i] > r) {
+                l = i - p[i];
+                r = i + p[i];
+            }
+        }
+        return p;
+    }
+
+    // To handle even-length palindromes, we use a "hashtag" transformation
+    string hashtag(const string& s) {
+        string res(2 * s.size() + 1, '#');
+        for (int i = 0; i < s.size(); i++) {
+            res[2 * i + 1] = s[i];
+        }
+        return res;
+    }
+
+    // DFS to traverse the tree and collect the characters in dfsStr
+    void dfs(int node, const string& s, int& index) {
+        int start = index;
+
+        // Traverse the subtree of the current node
+        for (int child : adj[node]) {
+            dfs(child, s, index);
+        }
+
+        dfsStr[index++] = s[node];
+
+        int end = index - 1;
+        int length = end - start + 1;
+
+        if (length % 2 == 0) {
+            int mid = (start + end) / 2;
+            evenPalindromes.push_back({2 * (mid + 1), length, node});
+        } else {
+            oddPalindromes.push_back({(start + end) / 2, (length + 1) / 2, node});
+        }
+    }
+
+    vector<bool> findAnswer(vector<int>& parent, string s) {
+        int n = parent.size();
+        adj.resize(n);
+        ans.resize(n, false);
+        dfsStr.resize(n);
+
+        // Build the tree from the parent array
+        for (int i = 0; i < n; i++) {
+            adj[parent[i]].push_back(i);
+        }
+
+        int index = 0;
+        dfs(0, s, index);  // Start DFS from the root
+
+        // Apply Manacher's algorithm on the DFS traversal string
+        vector<int> oddLengths = manacher_odd(dfsStr);
+        vector<int> evenLengths = manacher_odd(hashtag(dfsStr));
+
+        // Check odd-length palindromes
+        for (auto& entry : oddPalindromes) {
+            if (oddLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]] = true;
+            }
+        }
+
+        // Check even-length palindromes
+        for (auto& entry : evenPalindromes) {
+            if (evenLengths[entry[0]] >= entry[1]) {
+                ans[entry[2]] = true;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
 Q 3:
